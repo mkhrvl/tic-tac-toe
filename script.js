@@ -60,11 +60,11 @@ const gameController = (function () {
     const players = [
         {
             name: 'Player One',
-            marker: 1,
+            marker: 'o',
         },
         {
             name: 'Player Two',
-            marker: 2,
+            marker: 'x',
         },
     ];
 
@@ -151,15 +151,3 @@ const gameController = (function () {
         playRound,
     };
 })();
-
-const game = gameController;
-game.playRound(0, 0);
-game.playRound(2, 1);
-game.playRound(1, 2);
-game.playRound(1, 1);
-game.playRound(2, 2);
-game.playRound(0, 2);
-game.playRound(2, 0);
-game.playRound(1, 0);
-game.playRound(0, 1);
-game.playRound(0, 1);
