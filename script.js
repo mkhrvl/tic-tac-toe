@@ -21,7 +21,7 @@ const gameboard = (function () {
     };
 
     const isBoardFull = () => {
-        const remainingCells = board.flat().filter((cell) => cell.getValue() === 0);
+        const remainingCells = board.flat().filter((cell) => !cell.getValue());
         return remainingCells.length > 0 ? false : true;
     };
 
@@ -40,7 +40,7 @@ const gameboard = (function () {
 })();
 
 function cell() {
-    let value = 0;
+    let value = '';
 
     const setMarker = (player) => {
         value = player;
@@ -80,6 +80,14 @@ const gameController = (function () {
 
     const getActivePlayer = () => activePlayer;
 
+    let gameStatus = `${getActivePlayer().name}'s turn...`;
+
+    const setGameStatus = (status) => {
+        gameStatus = status;
+    };
+
+    const getGameStatus = () => gameStatus;
+
     const printNewRound = () => {
         board.printBoard();
         console.log(`${getActivePlayer().name}'s Turn`);
@@ -89,7 +97,7 @@ const gameController = (function () {
         let hasMatchingMarkers = false;
 
         rows.forEach((row) => {
-            if (row[0].getValue() !== 0) {
+            if (row[0].getValue()) {
                 const hasMatch = row.every((cell) => cell.getValue() === row[0].getValue());
                 if (hasMatch) hasMatchingMarkers = true;
             }
@@ -122,7 +130,7 @@ const gameController = (function () {
         const isCellTaken = board.isCellTaken(row, col);
 
         if (isBoardFull) {
-            console.log('board is full');
+            setGameStatus(`It's a Tie!`);
             return;
         }
 
@@ -134,10 +142,11 @@ const gameController = (function () {
         board.placeMarker(row, col, getActivePlayer().marker);
 
         if (hasWinner()) {
-            console.log(`${getActivePlayer().name} is the Winner!`);
+            setGameStatus(`${getActivePlayer().name} is the Winner!`);
             board.printBoard();
         } else {
             switchPlayerTurn();
+            setGameStatus(`${getActivePlayer().name}'s turn...`);
             printNewRound();
         }
     };
@@ -147,7 +156,55 @@ const gameController = (function () {
     return {
         setPlayerName,
         getActivePlayer,
+        getGameStatus,
         getBoard: board.getBoard,
         playRound,
     };
 })();
+
+const displayController = (function () {
+    const game = gameController;
+    const gameStatusDiv = document.querySelector('.game-status');
+    const boardDiv = document.querySelector('.board');
+    const newGameBtn = document.querySelector('.btn-newgame');
+
+    const updateScreen = () => {
+        boardDiv.textContent = '';
+
+        const board = game.getBoard();
+        const gameStatus = game.getGameStatus();
+
+        board.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                const cellBtn = document.createElement('button');
+                cellBtn.setAttribute('type', 'button');
+                cellBtn.classList.add('cell');
+                cellBtn.dataset.position = `${rowIndex},${colIndex}`;
+                cellBtn.textContent = cell.getValue();
+                boardDiv.appendChild(cellBtn);
+            });
+        });
+
+        gameStatusDiv.textContent = gameStatus;
+    };
+
+    const boardClickHandler = (e) => {
+        const selectedCell = e.target.dataset.position.split(',');
+        const row = selectedCell[0];
+        const col = selectedCell[1];
+
+        if (!selectedCell) return;
+        console.log('click');
+
+        game.playRound(row, col);
+
+        updateScreen();
+    };
+
+    boardDiv.addEventListener('click', boardClickHandler);
+
+    updateScreen();
+})();
+
+const display = displayController;
+display;

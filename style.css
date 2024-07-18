@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Sono:wght@200..800&display=swap');
+
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+    isolation: isolate;
+}
+
+:root {
+    --h-cell: 10px;
+    --ff-base: 'Sono', monospace;
+}
+
+body {
+    display: flex;
+    flex-flow: column nowrap;
+    font-family: var(--ff-base);
+    justify-content: center;
+    align-items: center;
+    height: 100svh;
+}
+
+.header {
+    margin-bottom: 1.5rem;
+}
+
+h1 {
+    font-size: 2.75rem;
+    position: relative;
+}
+
+.container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.game-status {
+    font-size: 1.5rem;
+    font-weight: 500;
+    background-color: #efefef;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-auto-rows: 150px;
+}
+
+.cell {
+    border: none;
+    background-color: white;
+    position: relative;
+    font-size: 5rem;
+    font-weight: 500;
+    padding-bottom: 0.9rem;
+}
+
+.cell:nth-of-type(-n + 6)::before,
+.cell:nth-of-type(3n + 1)::after,
+.cell:nth-of-type(3n + 2)::after {
+    background-color: gray;
+    border-radius: calc(var(--h-cell) / 2);
+    content: '';
+    position: absolute;
+    z-index: 1;
+}
+
+.cell:nth-of-type(-n + 6)::before {
+    bottom: calc((var(--h-cell) / 2) - var(--h-cell));
+    height: var(--h-cell);
+    left: calc((var(--h-cell) / 2) - var(--h-cell));
+    width: calc(100% + var(--h-cell));
+}
+
+.cell:nth-of-type(3n + 1)::after,
+.cell:nth-of-type(3n + 2)::after {
+    height: calc(100% + var(--h-cell));
+    right: calc((var(--h-cell) / 2) - var(--h-cell));
+    top: calc((var(--h-cell) / 2) - var(--h-cell));
+    width: var(--h-cell);
+}
+
+.btn-newgame {
+    border-radius: 8px;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+}
