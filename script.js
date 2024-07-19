@@ -12,6 +12,15 @@ const gameboard = (function () {
 
     const getBoard = () => board;
 
+    const resetBoard = () => {
+        for (let i = 0; i < ROWS; i++) {
+            board[i] = [];
+            for (let j = 0; j < COLS; j++) {
+                board[i][j] = cell();
+            }
+        }
+    };
+
     const placeMarker = (row, col, player) => {
         board[row][col].setMarker(player);
     };
@@ -23,6 +32,7 @@ const gameboard = (function () {
 
     return {
         getBoard,
+        resetBoard,
         placeMarker,
         isBoardFull,
     };
@@ -128,12 +138,19 @@ const gameController = (function () {
         setGameStatus(`${getActivePlayer().name}'s turn...`);
     };
 
+    const startNewRound = () => {
+        board.resetBoard();
+        activePlayer = players[0];
+        setGameStatus(`${getActivePlayer().name}'s turn...`);
+    };
+
     return {
         setPlayerName,
         getActivePlayer,
         getGameStatus,
         getBoard: board.getBoard,
         playRound,
+        startNewRound,
     };
 })();
 
@@ -171,11 +188,17 @@ const displayController = (function () {
         if (!selectedCell) return;
 
         game.playRound(row, col);
-
         updateScreen();
     };
 
     boardDiv.addEventListener('click', boardClickHandler);
+
+    const newGameClickHandler = () => {
+        game.startNewRound();
+        updateScreen();
+    };
+
+    newGameBtn.addEventListener('click', newGameClickHandler);
 
     updateScreen();
 })();

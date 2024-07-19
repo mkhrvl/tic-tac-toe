@@ -136,3 +136,7 @@ h1 {
     font-weight: 600;
     padding: 0.5rem 1.5rem;
 }
+
+.btn-newgame:hover {
+    filter: brightness(0.9);
+}
