@@ -16,26 +16,15 @@ const gameboard = (function () {
         board[row][col].setMarker(player);
     };
 
-    const isCellTaken = (row, col) => {
-        return board[row][col].getValue() ? true : false;
-    };
-
     const isBoardFull = () => {
         const remainingCells = board.flat().filter((cell) => !cell.getValue());
         return remainingCells.length > 0 ? false : true;
     };
 
-    const printBoard = () => {
-        const boardWithValues = board.map((row) => row.map((cell) => cell.getValue()));
-        console.table(boardWithValues);
-    };
-
     return {
         getBoard,
         placeMarker,
-        isCellTaken,
         isBoardFull,
-        printBoard,
     };
 })();
 
@@ -88,11 +77,6 @@ const gameController = (function () {
 
     const getGameStatus = () => gameStatus;
 
-    const printNewRound = () => {
-        board.printBoard();
-        console.log(`${getActivePlayer().name}'s Turn`);
-    };
-
     const hasMatchingMarkers = (rows) => {
         let hasMatchingMarkers = false;
 
@@ -126,8 +110,6 @@ const gameController = (function () {
     };
 
     const playRound = (row, col) => {
-        const isCellTaken = board.isCellTaken(row, col);
-
         if (!hasWinner() && !board.isBoardFull()) {
             board.placeMarker(row, col, getActivePlayer().marker);
         }
@@ -142,16 +124,9 @@ const gameController = (function () {
             return;
         }
 
-        if (isCellTaken) {
-            console.log(`cell ${row} ${col} is taken`);
-            return;
-        }
-
         switchPlayerTurn();
         setGameStatus(`${getActivePlayer().name}'s turn...`);
     };
-
-    printNewRound();
 
     return {
         setPlayerName,
@@ -194,7 +169,6 @@ const displayController = (function () {
         const col = selectedCell[1];
 
         if (!selectedCell) return;
-        console.log('click');
 
         game.playRound(row, col);
 
