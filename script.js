@@ -126,10 +126,18 @@ const gameController = (function () {
     };
 
     const playRound = (row, col) => {
-        const isBoardFull = board.isBoardFull();
         const isCellTaken = board.isCellTaken(row, col);
 
-        if (isBoardFull) {
+        if (!hasWinner() && !board.isBoardFull()) {
+            board.placeMarker(row, col, getActivePlayer().marker);
+        }
+
+        if (hasWinner()) {
+            setGameStatus(`${getActivePlayer().name} is the Winner!`);
+            return;
+        }
+
+        if (board.isBoardFull()) {
             setGameStatus(`It's a Tie!`);
             return;
         }
@@ -139,16 +147,8 @@ const gameController = (function () {
             return;
         }
 
-        board.placeMarker(row, col, getActivePlayer().marker);
-
-        if (hasWinner()) {
-            setGameStatus(`${getActivePlayer().name} is the Winner!`);
-            board.printBoard();
-        } else {
-            switchPlayerTurn();
-            setGameStatus(`${getActivePlayer().name}'s turn...`);
-            printNewRound();
-        }
+        switchPlayerTurn();
+        setGameStatus(`${getActivePlayer().name}'s turn...`);
     };
 
     printNewRound();
