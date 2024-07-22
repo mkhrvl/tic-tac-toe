@@ -204,11 +204,6 @@ const displayController = (function () {
             game.playRound(row, col);
             updateScreen();
         }
-
-        if (game.isRoundOver()) {
-            game.setGameStatus('Start A New Game');
-            setTimeout(() => updateScreen(), 2 * 1000);
-        }
     };
 
     boardDiv.addEventListener('click', boardClickHandler);
