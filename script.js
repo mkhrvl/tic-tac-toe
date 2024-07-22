@@ -147,7 +147,7 @@ const gameController = (function () {
 
     const startNewRound = () => {
         board.resetBoard();
-        activePlayer = players[0];
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
         isGameRoundOver = false;
         setGameStatus(`${getActivePlayer().name}'s turn...`);
     };
