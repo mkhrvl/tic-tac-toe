@@ -67,10 +67,6 @@ const gameController = (function () {
         },
     ];
 
-    const setPlayerName = (playerIndex, name) => {
-        players[playerIndex].name = name;
-    };
-
     let activePlayer = players[0];
 
     const switchPlayerTurn = () => {
@@ -86,6 +82,11 @@ const gameController = (function () {
     };
 
     const getGameStatus = () => gameStatus;
+
+    const setPlayerName = (playerIndex, name) => {
+        players[playerIndex].name = name;
+        gameStatus = `${getActivePlayer().name}'s turn...`;
+    };
 
     const hasMatchingMarkers = (rows) => {
         let hasMatchingMarkers = false;
@@ -168,6 +169,9 @@ const displayController = (function () {
     const gameStatusDiv = document.querySelector('.game-status');
     const boardDiv = document.querySelector('.board');
     const newGameBtn = document.querySelector('.btn-newgame');
+    const renamePlayersBtn = document.querySelector('.btn-rename');
+    const dialog = document.querySelector('.name-players');
+    const form = document.querySelector('.name-players__form');
 
     const updateScreen = () => {
         boardDiv.textContent = '';
@@ -216,6 +220,29 @@ const displayController = (function () {
 
     newGameBtn.addEventListener('click', newGameClickHandler);
 
+    const renamePlayersClickHandler = () => {
+        dialog.showModal();
+    };
+
+    renamePlayersBtn.addEventListener('click', renamePlayersClickHandler);
+
+    const setPlayersNames = () => {
+        dialog.showModal();
+    };
+
+    const formSubmitHandler = (e) => {
+        e.preventDefault();
+        const playerOneName = document.querySelector('#player-one').value;
+        const playerTwoName = document.querySelector('#player-two').value;
+        game.setPlayerName(0, playerOneName || 'Player One');
+        game.setPlayerName(1, playerTwoName || 'Player Two');
+        dialog.close();
+        updateScreen();
+    };
+
+    form.addEventListener('submit', formSubmitHandler);
+
+    setPlayersNames();
     updateScreen();
 })();
 

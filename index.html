@@ -18,9 +18,24 @@
         </header>
         <main>
             <div class="container">
+                <dialog class="name-players">
+                    <h2 class="name-players__header">Players</h2>
+                    <form class="name-players__form" method="dialog">
+                        <label for="player-one">Player One: </label>
+                        <input type="text" id="player-one" name="player-one" />
+
+                        <label for="player-two">Player Two: </label>
+                        <input type="text" id="player-two" name="player-two" />
+
+                        <button class="name-players__btn" type="submit">Save</button>
+                    </form>
+                </dialog>
                 <div class="game-status"></div>
                 <div class="board"></div>
-                <button class="btn-newgame" type="button">New Game</button>
+                <div class="buttons">
+                    <button class="btn-newgame" type="button">New Game</button>
+                    <button class="btn-rename" type="button">Rename Players</button>
+                </div>
             </div>
         </main>
     </body>
