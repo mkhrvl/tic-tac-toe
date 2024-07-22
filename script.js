@@ -119,6 +119,10 @@ const gameController = (function () {
         return false;
     };
 
+    let isGameRoundOver = false;
+
+    const isRoundOver = () => isGameRoundOver;
+
     const playRound = (row, col) => {
         if (!hasWinner() && !board.isBoardFull()) {
             board.placeMarker(row, col, getActivePlayer().marker);
@@ -126,11 +130,13 @@ const gameController = (function () {
 
         if (hasWinner()) {
             setGameStatus(`${getActivePlayer().name} is the Winner!`);
+            isGameRoundOver = true;
             return;
         }
 
         if (board.isBoardFull()) {
             setGameStatus(`It's a Tie!`);
+            isGameRoundOver = true;
             return;
         }
 
@@ -141,14 +147,17 @@ const gameController = (function () {
     const startNewRound = () => {
         board.resetBoard();
         activePlayer = players[0];
+        isGameRoundOver = false;
         setGameStatus(`${getActivePlayer().name}'s turn...`);
     };
 
     return {
+        setGameStatus,
         setPlayerName,
         getActivePlayer,
         getGameStatus,
         getBoard: board.getBoard,
+        isRoundOver,
         playRound,
         startNewRound,
     };
@@ -187,8 +196,15 @@ const displayController = (function () {
 
         if (!selectedCell) return;
 
-        game.playRound(row, col);
-        updateScreen();
+        if (!game.isRoundOver()) {
+            game.playRound(row, col);
+            updateScreen();
+        }
+
+        if (game.isRoundOver()) {
+            game.setGameStatus('Start A New Game');
+            setTimeout(() => updateScreen(), 2 * 1000);
+        }
     };
 
     boardDiv.addEventListener('click', boardClickHandler);
